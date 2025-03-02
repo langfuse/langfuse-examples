@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: java-demo
+  ai:
+    chat:
+      observations:
+        include-prompt: true       # Include prompt content in tracing (disabled by default for privacy)
+        include-completion: true   # Include completion content in tracing (disabled by default)
+management:
+  tracing:
+    sampling:
+      probability: 1.0    # Sample 100% of requests for full tracing (adjust in production as needed)
+  observations:
+    annotations:
+      enabled: true       # Enable @Observed (if you use observation annotations in code)
