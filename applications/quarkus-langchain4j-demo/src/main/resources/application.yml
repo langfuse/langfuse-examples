@@ -1,0 +1,1 @@
+quarkus.otel.exporter.otlp.traces.protocol=http/protobuf
