@@ -19,3 +19,5 @@
    ```
 2. Run the sample application via `./mvnw quarkus:dev`.
 3. Observe the new trace in the Langfuse web UI.
+
+![sample-trace](./screenshots/quarkus-langchain4j-demo-trace.png)
