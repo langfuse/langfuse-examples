@@ -12,6 +12,9 @@ Here, we try to highlight amazing work by our contributors and partners.
 
 ## Deployment Examples
 
+Here, we highlight community maintained deployment examples for various cloud providers.
+For the Langfuse-maintained modules checkout [langfuse-terraform-aws](https://github.com/langfuse/langfuse-terraform-aws) and [langfuse-terraform-gcp](https://github.com/langfuse/langfuse-terraform-gcp).
+
 | Example                                                                                             | Description                                                                                                                                                                       | Contributor                              |
 |-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
 | [AWS Terraform](https://github.com/tubone24/langfuse-v3-terraform)                                  | This Terraform module provides infrastructure components for deploying Langfuse v3 self-hosted on Amazon Web Service (AWS).                                                       | [@tubone24](https://github.com/tubone24) |
