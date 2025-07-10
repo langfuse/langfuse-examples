@@ -4,8 +4,8 @@ spring:
   ai:
     chat:
       observations:
-        include-prompt: true       # Include prompt content in tracing (disabled by default for privacy)
-        include-completion: true   # Include completion content in tracing (disabled by default)
+        log-prompt: true       # Include prompt content in tracing (disabled by default for privacy)
+        log-completion: true   # Include completion content in tracing (disabled by default)
 management:
   tracing:
     sampling:
