@@ -1,5 +1,6 @@
 package com.langfuse.springai;
 
+import io.micrometer.common.KeyValue;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationFilter;
 import org.springframework.ai.chat.observation.ChatModelObservationContext;
@@ -23,11 +24,29 @@ public class ChatModelCompletionContentObservationFilter implements ObservationF
         var prompts = processPrompts(chatModelObservationContext);
         var completions = processCompletion(chatModelObservationContext);
 
-        chatModelObservationContext
-                .addHighCardinalityKeyValue(HighCardinalityKeyNames.PROMPT.withValue(ObservabilityHelper.concatenateStrings(prompts)));
-        chatModelObservationContext
-                .addHighCardinalityKeyValue(HighCardinalityKeyNames.COMPLETION
-                        .withValue(ObservabilityHelper.concatenateStrings(completions)));
+        chatModelObservationContext.addHighCardinalityKeyValue(new KeyValue() {
+            @Override
+            public String getKey() {
+                return "gen_ai.prompt";
+            }
+
+            @Override
+            public String getValue() {
+                return ObservabilityHelper.concatenateStrings(prompts);
+            }
+        });
+
+        chatModelObservationContext.addHighCardinalityKeyValue(new KeyValue() {
+            @Override
+            public String getKey() {
+                return "gen_ai.completion";
+            }
+
+            @Override
+            public String getValue() {
+                return ObservabilityHelper.concatenateStrings(completions);
+            }
+        });
 
         return chatModelObservationContext;
     }
