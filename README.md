@@ -9,6 +9,7 @@ Here, we try to highlight amazing work by our contributors and partners.
 |---------------------------------------------------------------------|-------------------------------------------------------------------------------|------------------------------------------------|
 | [Spring AI Demo](./applications/spring-ai-demo)                     | A simple Spring Boot application that uses Langfuse to trace a chat endpoint. | [@jakehilborn](https://github.com/jakehilborn) |
 | [Quarkus Langchain4j Demo](./applications/quarkus-langchain4j-demo) | A Quarkus Langchain4J application that uses Langfuse for tracing.             | [@geoand](https://github.com/geoand)           |
+| [Go Langchain Demo](./applications/golang-langchain-demo)           | A Go application using langchaingo with OpenTelemetry tracing to Langfuse.    |                                                |
 
 ## Deployment Examples
 
