@@ -1,6 +1,6 @@
 # Langchat
 
-![](assets/intro.png)
+[![Pipecat example video](https://github.com/user-attachments/assets/293b7850-fe37-402d-a45b-7dbaa9f9bc0e)](https://www.youtube.com/embed/WbtpjaosrEQ?si=YO4SMldtjp9t_3ea)
 
 ## Prerequisites
 
