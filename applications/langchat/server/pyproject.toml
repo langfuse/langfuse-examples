@@ -1,0 +1,11 @@
+[project]
+name = "server"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "opentelemetry-exporter-otlp-proto-http>=1.36.0",
+    "pipecat-ai[anthropic,daily,elevenlabs,runner,silero,tracing]>=0.0.82",
+    "mcp>=1.0.0",
+]
