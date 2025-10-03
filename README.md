@@ -10,6 +10,7 @@ Here, we try to highlight amazing work by our contributors and partners.
 | [Spring AI Demo](./applications/spring-ai-demo)                     | A simple Spring Boot application that uses Langfuse to trace a chat endpoint. | [@jakehilborn](https://github.com/jakehilborn) |
 | [Quarkus Langchain4j Demo](./applications/quarkus-langchain4j-demo) | A Quarkus Langchain4J application that uses Langfuse for tracing.             | [@geoand](https://github.com/geoand)           |
 | [Go Langchain Demo](./applications/golang-langchain-demo)           | A Go application using langchaingo with OpenTelemetry tracing to Langfuse.    |                                                |
+| [DSPy.rb Langfuse Integration](https://github.com/vicentereig/dspy.rb) | A Ruby framework for LLM programming with built-in Langfuse tracing via OpenTelemetry. | [@vicentereig](https://github.com/vicentereig) |
 | [Tracing Pipecat Applications](./applications/langchat)             | A Pipecat application sending traces to Langfuse.                             | [@aabedraba](https://github.com/aabedraba)     |
 
 ## Deployment Examples
@@ -45,3 +46,9 @@ Below is a list of SDKs maintained by the community. Please note that for tracin
 
 All examples are provided as-is and are meant to illustrate how to deploy and use Langfuse.
 Langfuse does not assume any responsibility or liability for the examples given, especially references to external repositories or web-sites.
+
+## Additional Resources
+
+- [DSPy.rb Observability Documentation](https://vicentereig.github.io/dspy.rb/production/observability/) - Zero-config Langfuse integration guide
+- [DSPy.rb Concurrent Architecture Deep Dive](https://vicentereig.github.io/dspy.rb/blog/articles/dspy-rb-concurrent-architecture-deep-dive/) - Technical architecture overview
+- [DSPy.rb Discussion](https://x.com/highwayvaquero/status/1965031131948196233) - Community thread
