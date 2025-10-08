@@ -8,8 +8,7 @@
 - Node.js 20+
 - Langfuse stack ([Cloud](https://cloud.langfuse.com/) or [Self-Hosted](https://langfuse.com/docs/deployment/self-host))
 - Langfuse API key
-- OpenAI API key
-- ElevenLabs API key
+- Gemini API key
 - Daily.co API key
 
 ## How to run 
