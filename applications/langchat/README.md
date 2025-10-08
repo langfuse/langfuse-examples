@@ -1,5 +1,7 @@
 # Langchat
 
+This example shows how to create a conversational voice application with [Pipecat](https://github.com/pipecat-ai/pipecat) and [Gemini](https://cloud.google.com/text-to-speech/docs/gemini-tts) and trace the conversation with [Langfuse](https://langfuse.com/).
+
 [![Pipecat example video](https://github.com/user-attachments/assets/293b7850-fe37-402d-a45b-7dbaa9f9bc0e)](https://www.youtube.com/embed/WbtpjaosrEQ?si=YO4SMldtjp9t_3ea)
 
 ## Prerequisites
