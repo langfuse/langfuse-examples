@@ -1,4 +1,4 @@
-"""OpenAI bot with optional MCP integration.
+"""Google Gemini bot with optional MCP integration.
 
 Features:
 - Real-time audio via Daily
@@ -21,10 +21,11 @@ from pipecat.frames.frames import (
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
-from pipecat.processors.aggregators.openai_llm_context import OpenAILLMContext
+from pipecat.processors.aggregators.llm_context import LLMContext
+from pipecat.processors.aggregators.llm_response_universal import LLMContextAggregatorPair
 from pipecat.processors.frameworks.rtvi import RTVIConfig, RTVIObserver, RTVIProcessor
 from pipecat.runner.types import RunnerArguments
-from pipecat.services.openai.llm import OpenAILLMService
+from pipecat.services.google.llm import GoogleLLMService
 from pipecat.services.elevenlabs.tts import ElevenLabsTTSService
 from pipecat.services.mcp_service import MCPClient
 from pipecat.transports.services.daily import DailyParams, DailyTransport
@@ -80,7 +81,7 @@ async def bot(runner_args: RunnerArguments):
         voice_id="pNInz6obpgDQGcFmaJgB",
     )
 
-    llm = OpenAILLMService(api_key=os.environ["OPENAI_API_KEY"])
+    llm = GoogleLLMService(api_key=os.environ["GOOGLE_API_KEY"])
 
     try:
         mcp = MCPClient(
@@ -100,9 +101,9 @@ async def bot(runner_args: RunnerArguments):
             logger.info("MCP tools registered successfully")
         except Exception as e:
             logger.error(f"Error registering MCP tools: {e}")
-            tools = ToolsSchema()
+            tools = ToolsSchema(standard_tools=[])
     else:
-        tools = ToolsSchema()
+        tools = ToolsSchema(standard_tools=[])
 
     messages = [
         {
@@ -111,8 +112,8 @@ async def bot(runner_args: RunnerArguments):
         },
     ]
 
-    context = OpenAILLMContext(messages, tools)  # type: ignore[arg-type]
-    context_aggregator = llm.create_context_aggregator(context)
+    context = LLMContext(messages, tools) 
+    context_aggregator = LLMContextAggregatorPair(context)
 
     #
     # RTVI events for Pipecat client UI
