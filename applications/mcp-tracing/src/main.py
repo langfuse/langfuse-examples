@@ -1,0 +1,56 @@
+import asyncio
+
+from agents import Agent, Runner
+from agents.mcp import MCPServer, MCPServerStdio
+from dotenv import load_dotenv
+from openinference.instrumentation.openai_agents import OpenAIAgentsInstrumentor
+from langfuse import get_client, observe
+from utils.otel_utils import TracedMCPServer
+
+
+load_dotenv()
+
+langfuse = get_client()
+OpenAIAgentsInstrumentor().instrument()
+
+
+async def run(mcp_server: MCPServer):
+    traced_server = TracedMCPServer(mcp_server)
+    
+    agent = Agent(
+        name="Assistant",
+        model="openai/gpt-4o-mini",
+        instructions="Use the tools to answer the users question.",
+        mcp_servers=[traced_server],
+    )
+
+    while True:
+        message = input("\n\nEnter your question (or 'exit' to quit): ")
+        if message.lower() == "exit" or message.lower() == "q":
+            break
+        print(f"\n\nRunning: {message}")
+
+        @observe(name="agent-run")
+        async def run_agent(message: str):
+            result = await Runner.run(starting_agent=agent, input=message)
+            return result.final_output
+        
+        result = await run_agent(message)
+        print(result)
+        langfuse.flush()
+
+
+async def main():
+    async with MCPServerStdio(
+        name="Search server",
+        params={
+            "command": "fastmcp",
+            "args": ["run", "--no-banner", "./src/search_server.py"],
+        },
+        client_session_timeout_seconds=30,
+    ) as server:
+        await run(server)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
