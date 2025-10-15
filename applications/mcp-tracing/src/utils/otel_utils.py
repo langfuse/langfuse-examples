@@ -5,7 +5,8 @@
 # See: https://github.com/timvw/fastmcp-otel-langfuse/blob/main/LICENSE
 #
 # Copied on: 2025-10-15
-# Modifications: added `inject_otel_context_to_mcp_server` decorator
+# Modifications: 
+# - Added `TracedMCPServer` wrapper class for transparent context propagation
 
 """
 OpenTelemetry context utilities for MCP _meta field propagation.
@@ -19,6 +20,7 @@ import asyncio
 import functools
 from typing import Any, Callable, TypeVar
 
+from agents.mcp import MCPServer
 from opentelemetry import context
 from opentelemetry.context import Context
 from opentelemetry.propagate import get_global_textmap
@@ -132,47 +134,37 @@ def with_otel_context_from_meta(func: F) -> F:
         return sync_wrapper
 
 
-def inject_otel_context_to_mcp_server(func: F) -> F:
+class TracedMCPServer:
     """
-    Decorator that patches an MCP server to automatically inject OpenTelemetry context
-    into tool calls via the _meta field.
-
+    Wrapper that adds OpenTelemetry context propagation to any MCP server.
+    
+    This wrapper automatically injects the current OTEL context into the _meta
+    field of all tool calls, enabling distributed tracing across MCP servers.
+    
     Usage:
-        @inject_otel_context_to_mcp_server
-        async def run(mcp_server):
-            # MCP server will automatically inject context into tool calls
-            pass
-
-    Args:
-        func: The function to decorate
-
-    Returns:
-        Decorated function that patches the MCP server to inject context
+        async with MCPServerStdio(...) as server:
+            traced_server = TracedMCPServer(server)
+            agent = Agent(mcp_servers=[traced_server], ...)
+    
+    The wrapper is transparent - it delegates all methods to the underlying
+    server except for call_tool, which it wraps to inject tracing context.
+    
+    This wrapper works with any MCP server implementation (MCPServerStdio,
+    MCPServerHTTP, or custom implementations) without requiring changes to
+    the underlying server or server code.
     """
-    @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
-        # Find the mcp_server argument
-        if 'mcp_server' in kwargs:
-            server = kwargs['mcp_server']
-        else:
-            # Look for mcp_server in positional args
-            server = None
-            for arg in args:
-                if hasattr(arg, 'call_tool'):
-                    server = arg
-                    break
+    
+    def __init__(self, server: MCPServer):
+        self._server = server
+    
+    async def call_tool(self, tool_name: str, arguments: dict[str, Any] | None = None) -> Any:
+        if arguments is None:
+            arguments = {}
         
-        if server and hasattr(server, 'call_tool'):
-            # Patch the call_tool method
-            original_call_tool = server.call_tool
-            
-            async def patched_call_tool(tool_name: str, arguments: dict[str, Any] | None) -> Any:
-                if arguments is None:
-                    arguments = {}
-                arguments["_meta"] = inject_otel_context_to_meta()
-                return await original_call_tool(tool_name, arguments)
-            
-            server.call_tool = patched_call_tool
+        # Inject current OTEL context into _meta field
+        arguments["_meta"] = inject_otel_context_to_meta()
         
-        return await func(*args, **kwargs)
-    return wrapper
+        return await self._server.call_tool(tool_name, arguments)
+    
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._server, name)

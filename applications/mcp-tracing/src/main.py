@@ -5,7 +5,7 @@ from agents.mcp import MCPServer, MCPServerStdio
 from dotenv import load_dotenv
 from openinference.instrumentation.openai_agents import OpenAIAgentsInstrumentor
 from langfuse import get_client
-from utils.otel_utils import inject_otel_context_to_mcp_server
+from utils.otel_utils import TracedMCPServer
 
 
 load_dotenv()
@@ -14,13 +14,14 @@ langfuse = get_client()
 OpenAIAgentsInstrumentor().instrument()
 
 
-@inject_otel_context_to_mcp_server
 async def run(mcp_server: MCPServer):
+    traced_server = TracedMCPServer(mcp_server)
+    
     agent = Agent(
         name="Assistant",
         model="openai/gpt-4o-mini",
         instructions="Use the tools to answer the users question.",
-        mcp_servers=[mcp_server],
+        mcp_servers=[traced_server],
     )
 
     while True:

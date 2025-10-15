@@ -1,7 +1,14 @@
-# MCP Tracing
+# MCP Tracing with Langfuse
 
 This example demonstrates how to integrate Model Context Protocol (MCP) https://modelcontextprotocol.io/ with
 Langfuse https://langfuse.com/ tracing for observability in AI agent workflows.
+
+## Key Features
+
+- **Transparent Context Propagation**: Adds utils to automatically inject OpenTelemetry context into MCP tool calls
+- **Framework Agnostic**: Works with any MCP server implementation (stdio, HTTP, SSE transports)
+- **Standards Compliant**: Uses MCP's `_meta` field convention for context propagation (W3C Trace Context)
+- **Distributed Tracing**: Enables end-to-end tracing from client to server to external APIs
 
 ## Prerequisites
 
