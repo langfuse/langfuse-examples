@@ -4,7 +4,7 @@ from agents import Agent, Runner
 from agents.mcp import MCPServer, MCPServerStdio
 from dotenv import load_dotenv
 from openinference.instrumentation.openai_agents import OpenAIAgentsInstrumentor
-from langfuse import get_client
+from langfuse import get_client, observe
 from utils.otel_utils import TracedMCPServer
 
 
@@ -29,9 +29,15 @@ async def run(mcp_server: MCPServer):
         if message.lower() == "exit" or message.lower() == "q":
             break
         print(f"\n\nRunning: {message}")
+
+        @observe(name="agent-run")
+        async def run_agent(message: str):
+            result = await Runner.run(starting_agent=agent, input=message)
+            return result.final_output
         
-        result = await Runner.run(starting_agent=agent, input=message)
-        print(result.final_output)
+        result = await run_agent(message)
+        print(result)
+        langfuse.flush()
 
 
 async def main():

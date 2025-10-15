@@ -17,7 +17,7 @@ exa = Exa(api_key=os.getenv("EXA_API_KEY"))
 
 @mcp.tool()
 @with_otel_context_from_meta
-@observe(name="exa-search")
+@observe(name="trace-from-mcp-server")
 def search(query: str, _meta: dict = None) -> str:
     """Search for web pages using Exa"""
 
