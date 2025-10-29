@@ -13,6 +13,7 @@ Here, we try to highlight amazing work by our contributors and partners.
 | [DSPy.rb Langfuse Integration](https://github.com/vicentereig/dspy.rb) | A Ruby framework for LLM programming with built-in Langfuse tracing via OpenTelemetry. | [@vicentereig](https://github.com/vicentereig) |
 | [Tracing Pipecat Applications](./applications/langchat)             | A Pipecat application sending traces to Langfuse.                             | [@aabedraba](https://github.com/aabedraba)     |
 | [Tracing MCP Servers](./applications/mcp-tracing)  | An example on using the OpenAI agents SDK together with an MCP server. | [@aabedraba](https://github.com/aabedraba)   |
+| [RAG Observability and Evals](./applications/rag) | A RAG application that uses Langfuse for tracing and evals. | [@aabedraba](https://github.com/aabedraba) |
 
 ## Deployment Examples
 
