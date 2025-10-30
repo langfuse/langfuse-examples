@@ -21,6 +21,9 @@ from main import get_retriever, urls
 load_dotenv()
 langfuse = get_client()
 
+print("Fetching dataset")
+dataset = langfuse.get_dataset(name="rag_bot_evals")
+
 def create_retriever_task(chunk_size: int, chunk_overlap: int):
   """Factory function to create a retriever task with specific chunk settings."""
 
@@ -73,10 +76,6 @@ def relevant_chunks_evaluator(*, input, output, expected_output, metadata, **kwa
   return Evaluation(
     name="retrieval_relevance", value=avg_score, comment=retrieval_relevance_result.get("explanation", "")
   )
-
-
-print("Fetching dataset")
-dataset = langfuse.get_dataset(name="rag_bot_evals")
 
 
 chunk_sizes = [128, 256, 512]
