@@ -15,6 +15,7 @@ Here, we try to highlight amazing work by our contributors and partners.
 | [Tracing MCP Servers](./applications/mcp-tracing)  | An example on using the OpenAI agents SDK together with an MCP server. | [@aabedraba](https://github.com/aabedraba)   |
 | [RAG Observability and Evals](./applications/rag) | A RAG application that uses Langfuse for tracing and evals. | [@aabedraba](https://github.com/aabedraba) |
 | [User Feedback](./applications/user-feedback) | An example on collecting user feedback using Langfuse Web SDK. | [@aabedraba](https://github.com/aabedraba) |
+| [Custom Annotation UI](./applications/custom-annotation-ui) | An example on building a custom annotation UI using Langfuse APIs. | [@aabedraba](https://github.com/aabedraba) |
 
 ## Deployment Examples
 
