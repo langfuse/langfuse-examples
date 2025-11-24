@@ -1,0 +1,44 @@
+{
+  "name": "time-difference-explainer",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "setup-prompt": "ts-node src/setupPrompt.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lotte-Verheyden/time-difference-explainer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lotte-Verheyden/time-difference-explainer/issues"
+  },
+  "homepage": "https://github.com/Lotte-Verheyden/time-difference-explainer#readme",
+  "dependencies": {
+    "@langchain/core": "^1.0.6",
+    "@langchain/langgraph": "^1.0.2",
+    "@langchain/openai": "^1.1.2",
+    "@langfuse/core": "^4.4.2",
+    "@langfuse/langchain": "^4.4.2",
+    "@langfuse/otel": "^4.4.2",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.67.0",
+    "@opentelemetry/resources": "^2.2.0",
+    "@opentelemetry/sdk-node": "^0.208.0",
+    "@opentelemetry/semantic-conventions": "^1.38.0",
+    "@types/node": "^24.10.1",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "langchain": "^1.0.6",
+    "langfuse": "^3.38.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "zod": "^4.1.12"
+  }
+}
