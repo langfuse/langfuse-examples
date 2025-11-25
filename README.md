@@ -37,6 +37,7 @@ Below is a list of SDKs maintained by the community. Please note that for tracin
 |----------|-------------|-------------|
 | Rust     | Unofficial Rust client for Langfuse: [adolfousier/langfuse-rust](https://github.com/adolfousier/langfuse-rust) | [@adolfousier](https://github.com/adolfousier) |
 | Ruby     | Unofficial Ruby SDK for Langfuse: [ai-firstly/langfuse-ruby](https://github.com/ai-firstly/langfuse-ruby) | [@ai-firstly](https://github.com/ai-firstly) |
+| Ruby     | Unofficial Ruby SDK for Langfuse: [simplepractice/langfuse-ruby](https://github.com/simplepractice/langfuse-ruby) | [@NoahFisher](https://github.com/NoahFisher) |
 | Elixir   | Unofficial Elixir SDK for Langfuse: [workera-ai/langfuse_sdk](https://github.com/workera-ai/langfuse_sdk) | [@workera-ai](https://github.com/workera-ai) |
 | PHP      | PHP library for integrating Langfuse: [janzaba/langfuse-php](https://github.com/janzaba/langfuse-php) | [@janzaba](https://github.com/janzaba) |
 | .NET     | .NET client library for Langfuse: [lukaszzborek/Langfuse-dotnet](https://github.com/lukaszzborek/Langfuse-dotnet) | [@lukaszzborek](https://github.com/lukaszzborek) |
