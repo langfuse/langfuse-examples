@@ -6,6 +6,7 @@ spring:
       observations:
         log-prompt: true       # Include prompt content in tracing (disabled by default for privacy)
         log-completion: true   # Include completion content in tracing (disabled by default)
+
 management:
   tracing:
     sampling:
@@ -13,3 +14,32 @@ management:
   observations:
     annotations:
       enabled: true       # Enable @Observed (if you use observation annotations in code)
+
+otel:
+  logs:
+    exporter: none        # Disable OTLP log export (Langfuse expects traces only)
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: google
+  ai:
+    google:
+      genai:
+        chat:
+          options:
+            model: gemini-2.0-flash
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: openai
+  ai:
+    openai:
+      chat:
+        options:
+          model: gpt-4o-mini
