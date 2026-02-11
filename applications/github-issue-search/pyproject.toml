@@ -1,0 +1,15 @@
+[project]
+name = "github-issue-search"
+version = "0.1.0"
+description = "CLI chatbot that searches past Langfuse GitHub issues to help users find existing reports before opening new ones."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.0.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+github-issue-search = "github_issue_search.main:main"
