@@ -3,6 +3,7 @@ import os
 
 import httpx
 from dotenv import load_dotenv
+from langfuse import Langfuse
 from openai import OpenAI
 from rich.console import Console
 from rich.markdown import Markdown
@@ -11,22 +12,6 @@ load_dotenv()
 
 GITHUB_REPO = "langfuse/langfuse"
 GITHUB_API_BASE = "https://api.github.com"
-
-SYSTEM_PROMPT = """\
-You are a helpful assistant that searches past GitHub issues in the Langfuse \
-repository (langfuse/langfuse) to help users find whether their question, bug, \
-or feature request has already been reported.
-
-When a user describes a problem or idea:
-1. Think about what keywords and phrases would match relevant issues.
-2. Use the search_issues tool to search. Call it multiple times with different \
-queries to get better coverage (e.g. try synonyms, related terms, error messages).
-3. Summarize what you found. Always include the issue number, title, state \
-(open/closed), and URL so users can check directly.
-4. If nothing relevant was found, let the user know it appears to be a new topic \
-and encourage them to open an issue.
-
-Be concise but thorough."""
 
 TOOLS = [
     {
@@ -114,7 +99,15 @@ def handle_tool_calls(console: Console, tool_calls: list) -> list[dict]:
 def main():
     console = Console()
     client = OpenAI()
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    langfuse = Langfuse(
+        public_key=os.environ["LANGFUSE_PUBLIC_KEY"],
+        secret_key=os.environ["LANGFUSE_SECRET_KEY"],
+        host=os.environ["LANGFUSE_BASE_URL"],
+    )
+
+    prompt = langfuse.get_prompt("github-issue-search", label="production")
+    system_prompt = prompt.compile()
+    messages = [{"role": "system", "content": system_prompt}]
 
     console.print("[bold]Langfuse GitHub Issue Search[/bold]")
     console.print("Describe a bug, feature idea, or question — I'll check if there's an existing issue.")
