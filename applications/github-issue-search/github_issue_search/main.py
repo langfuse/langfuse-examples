@@ -3,73 +3,89 @@ import os
 
 import httpx
 from dotenv import load_dotenv
-from langfuse import Langfuse
-from openai import OpenAI
+from langfuse import Langfuse, get_client, observe
+from langfuse.openai import OpenAI
 from rich.console import Console
 from rich.markdown import Markdown
 
 load_dotenv()
 
 GITHUB_REPO = "langfuse/langfuse"
-GITHUB_API_BASE = "https://api.github.com"
 
 TOOLS = [
     {
         "type": "function",
         "function": {
-            "name": "search_issues",
+            "name": "search_discussions",
             "description": (
-                "Search GitHub issues in the langfuse/langfuse repository. "
-                "Use different queries to cover different angles of the user's question."
+                "Search GitHub discussions (ideas, feature requests, questions) "
+                "in langfuse/langfuse. Use different queries to cover different "
+                "angles of the user's question."
             ),
             "parameters": {
                 "type": "object",
                 "properties": {
                     "query": {
                         "type": "string",
-                        "description": "Search query keywords for GitHub issues.",
+                        "description": "Search query keywords.",
                     }
                 },
                 "required": ["query"],
             },
         },
-    }
+    },
 ]
 
 
-def search_github_issues(query: str) -> list[dict]:
-    """Search GitHub issues via the GitHub Search API."""
-    github_token = os.environ.get("GITHUB_TOKEN")
-
-    headers = {"Accept": "application/vnd.github+json"}
-    if github_token:
-        headers["Authorization"] = f"Bearer {github_token}"
-
-    params = {
-        "q": f"{query} repo:{GITHUB_REPO} is:issue",
-        "sort": "relevance",
-        "per_page": 5,
+DISCUSSIONS_QUERY = """
+query($search: String!) {
+  search(query: $search, type: DISCUSSION, first: 5) {
+    nodes {
+      ... on Discussion {
+        number
+        title
+        url
+        body
+        category { name }
+        createdAt
+        comments { totalCount }
+        answer { id }
+      }
     }
+  }
+}
+"""
 
-    resp = httpx.get(
-        f"{GITHUB_API_BASE}/search/issues",
-        headers=headers,
-        params=params,
+
+@observe()
+def search_github_discussions(query: str) -> list[dict]:
+    """Search GitHub discussions via the GraphQL API."""
+    github_token = os.environ.get("GITHUB_TOKEN")
+    if not github_token:
+        return [{"error": "GITHUB_TOKEN required to search discussions"}]
+
+    resp = httpx.post(
+        "https://api.github.com/graphql",
+        headers={"Authorization": f"Bearer {github_token}"},
+        json={
+            "query": DISCUSSIONS_QUERY,
+            "variables": {"search": f"repo:{GITHUB_REPO} {query}"},
+        },
     )
     resp.raise_for_status()
 
     return [
         {
-            "number": item["number"],
-            "title": item["title"],
-            "state": item["state"],
-            "url": item["html_url"],
-            "body": (item["body"] or "")[:500],
-            "labels": [label["name"] for label in item["labels"]],
-            "created_at": item["created_at"],
-            "comments": item["comments"],
+            "number": node["number"],
+            "title": node["title"],
+            "url": node["url"],
+            "body": (node["body"] or "")[:500],
+            "category": node["category"]["name"],
+            "created_at": node["createdAt"],
+            "comments": node["comments"]["totalCount"],
+            "answered": node["answer"] is not None,
         }
-        for item in resp.json()["items"]
+        for node in resp.json()["data"]["search"]["nodes"]
     ]
 
 
@@ -77,34 +93,53 @@ def handle_tool_calls(console: Console, tool_calls: list) -> list[dict]:
     """Execute tool calls and return tool result messages."""
     results = []
     for tool_call in tool_calls:
-        if tool_call.function.name == "search_issues":
-            args = json.loads(tool_call.function.arguments)
-            console.print(f"  [dim]Searching: \"{args['query']}\"[/dim]")
-            try:
-                output = search_github_issues(args["query"])
-                content = json.dumps(output)
-            except httpx.HTTPStatusError as e:
-                content = json.dumps({"error": f"GitHub API error: {e.response.status_code}"})
-
-            results.append(
-                {
-                    "role": "tool",
-                    "tool_call_id": tool_call.id,
-                    "content": content,
-                }
-            )
+        if tool_call.function.name != "search_discussions":
+            continue
+        args = json.loads(tool_call.function.arguments)
+        console.print(f"  [dim]Searching: \"{args['query']}\"[/dim]")
+        try:
+            output = search_github_discussions(args["query"])
+            content = json.dumps(output)
+        except httpx.HTTPStatusError as e:
+            content = json.dumps({"error": f"GitHub API error: {e.response.status_code}"})
+        results.append(
+            {
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "content": content,
+            }
+        )
     return results
+
+
+@observe(name="github-issue-search-bot", capture_input=False)
+def handle_turn(client: OpenAI, console: Console, messages: list):
+    """Handle a single user turn, including tool-calling loop."""
+    get_client().update_current_trace(input=messages[-1]["content"])
+
+    while True:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            tools=TOOLS,
+        )
+
+        choice = response.choices[0].message
+        messages.append(choice)
+
+        if not choice.tool_calls:
+            break
+
+        tool_results = handle_tool_calls(console, choice.tool_calls)
+        messages.extend(tool_results)
+
+    return choice.content
 
 
 def main():
     console = Console()
     client = OpenAI()
-    langfuse = Langfuse(
-        public_key=os.environ["LANGFUSE_PUBLIC_KEY"],
-        secret_key=os.environ["LANGFUSE_SECRET_KEY"],
-        host=os.environ["LANGFUSE_BASE_URL"],
-    )
-
+    langfuse = Langfuse()
     prompt = langfuse.get_prompt("github-issue-search", label="production")
     system_prompt = prompt.compile()
     messages = [{"role": "system", "content": system_prompt}]
@@ -126,25 +161,13 @@ def main():
 
         messages.append({"role": "user", "content": user_input})
 
-        while True:
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=messages,
-                tools=TOOLS,
-            )
-
-            choice = response.choices[0].message
-            messages.append(choice)
-
-            if not choice.tool_calls:
-                break
-
-            tool_results = handle_tool_calls(console, choice.tool_calls)
-            messages.extend(tool_results)
+        response_text = handle_turn(client, console, messages)
 
         console.print()
-        console.print(Markdown(choice.content))
+        console.print(Markdown(response_text))
         console.print()
+
+    get_client().flush()
 
 
 if __name__ == "__main__":
