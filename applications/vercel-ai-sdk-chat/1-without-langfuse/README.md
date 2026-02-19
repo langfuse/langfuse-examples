@@ -69,8 +69,3 @@ npm run build
 - `app/page.tsx`: Chat UI and rendering of parts (reasoning/text/tools/sources)
 - `lib/system-prompt.ts`: Assistant behavior prompt
 - `components/ai-elements/*`: UI primitives used by the chat screen
-
-## Notes
-
-- The input composer is part of normal layout flow (not overlayed), so it does not block message content.
-- Tool payloads are collapsed by default for cleaner reading; click `Show details` to inspect raw input/output.
