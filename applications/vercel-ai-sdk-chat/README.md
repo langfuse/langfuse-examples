@@ -12,8 +12,11 @@ This example is designed for **trainings and workshops**. It demonstrates how to
 ## Training Flow
 
 1. Start with `1-without-langfuse` to understand the base app.
-2. Add Langfuse step by step (or compare with `2-with-langfuse` once complete).
-3. Explore traces, prompts, and evaluations in the Langfuse dashboard.
+2. Add Langfuse step by step:
+   - Add Langfuse tracing
+   - Add Langfuse prompt management
+   - Add Langfuse evaluation
+3. Compare your solution with the `2-with-langfuse` folder.
 
 ## Base Application
 
