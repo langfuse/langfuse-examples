@@ -45,6 +45,8 @@ Below is a list of SDKs maintained by the community. Please note that for tracin
 | JVM      | Java/JVM SDK for Langfuse: [kpavlov/langfuse-jvm](https://github.com/kpavlov/langfuse-jvm) | [@kpavlov](https://github.com/kpavlov) |
 | Go       | Go SDK for Langfuse: [henomis/langfuse-go](https://github.com/henomis/langfuse-go) | [@henomis](https://github.com/henomis) |
 | Go       | Go SDK for Langfuse: [wepala/langfuse-go](https://github.com/wepala/langfuse-go) | [@wepala](https://github.com/wepala) |
+| Go       | Go SDK for Langfuse: [oiime/langfuse-go](https://github.com/oiime/langfuse-go) | [@oiime](https://github.com/oiime) |
+
 
 
 ## Disclaimer
