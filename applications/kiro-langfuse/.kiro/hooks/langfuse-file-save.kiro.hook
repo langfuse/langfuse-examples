@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Langfuse - File Save",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["**/*"]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "KIRO_HOOK_EVENT=file_save node hooks/hook-handler.js"
+  }
+}

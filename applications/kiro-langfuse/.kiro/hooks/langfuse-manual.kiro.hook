@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Langfuse - Manual Trace",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "KIRO_HOOK_EVENT=manual node hooks/hook-handler.js"
+  }
+}

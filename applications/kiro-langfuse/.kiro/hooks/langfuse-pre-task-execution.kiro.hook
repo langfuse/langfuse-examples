@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Langfuse - Pre Task Execution",
+  "when": {
+    "type": "preTaskExecution"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "KIRO_HOOK_EVENT=pre_task_execution node hooks/hook-handler.js"
+  }
+}

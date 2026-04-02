@@ -1,0 +1,15 @@
+{
+  "name": "kiro-langfuse-hooks",
+  "version": "1.0.0",
+  "description": "Kiro hooks integration with Langfuse for AI agent observability",
+  "type": "module",
+  "main": "hook-handler.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:integration": "LANGFUSE_INTEGRATION_TEST=true LANGFUSE_SECRET_KEY=sk-lf-test LANGFUSE_PUBLIC_KEY=pk-lf-test LANGFUSE_BASE_URL=http://localhost:3033 node --test test/integration/*.test.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "langfuse": "^3.30.0"
+  }
+}

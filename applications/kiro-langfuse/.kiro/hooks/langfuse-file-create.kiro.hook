@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Langfuse - File Create",
+  "when": {
+    "type": "fileCreated",
+    "patterns": ["**/*"]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "KIRO_HOOK_EVENT=file_create node hooks/hook-handler.js"
+  }
+}
