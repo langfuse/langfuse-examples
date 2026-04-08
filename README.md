@@ -42,7 +42,7 @@ Below is a list of SDKs maintained by the community. Please note that for tracin
 | Ruby     | Unofficial Ruby SDK for Langfuse: [simplepractice/langfuse-ruby](https://github.com/simplepractice/langfuse-ruby) | [@NoahFisher](https://github.com/NoahFisher) |
 | Elixir   | Unofficial Elixir SDK for Langfuse: [workera-ai/langfuse_sdk](https://github.com/workera-ai/langfuse_sdk) | [@workera-ai](https://github.com/workera-ai) |
 | PHP      | PHP library for integrating Langfuse: [janzaba/langfuse-php](https://github.com/janzaba/langfuse-php) | [@janzaba](https://github.com/janzaba) |
-| PHP (Laravel) | Laravel SDK with tracing, prompts, and auto-instrumentation for Prism, Laravel AI, and Neuron AI: [axyr/laravel-langfuse](https://github.com/axyr/laravel-langfuse) | [@axyr](https://github.com/axyr) |
+| Laravel | Laravel SDK with tracing, prompts, and auto-instrumentation for Prism, Laravel AI, and Neuron AI: [axyr/laravel-langfuse](https://github.com/axyr/laravel-langfuse) | [@axyr](https://github.com/axyr) |
 | .NET     | .NET client library for Langfuse: [lukaszzborek/Langfuse-dotnet](https://github.com/lukaszzborek/Langfuse-dotnet) | [@lukaszzborek](https://github.com/lukaszzborek) |
 | JVM      | Java/JVM SDK for Langfuse: [kpavlov/langfuse-jvm](https://github.com/kpavlov/langfuse-jvm) | [@kpavlov](https://github.com/kpavlov) |
 | Go       | Go SDK for Langfuse: [henomis/langfuse-go](https://github.com/henomis/langfuse-go) | [@henomis](https://github.com/henomis) |
