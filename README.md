@@ -17,6 +17,7 @@ Here, we try to highlight amazing work by our contributors and partners.
 | [User Feedback](./applications/user-feedback) | An example on collecting user feedback using Langfuse Web SDK. | [@aabedraba](https://github.com/aabedraba) |
 | [Custom Annotation UI](./applications/custom-annotation-ui) | An example on building a custom annotation UI using Langfuse APIs. | [@aabedraba](https://github.com/aabedraba) |
 | [Kiro Langfuse Integration](./applications/kiro-langfuse) | Kiro IDE hooks that send AI agent activity traces to Langfuse. | [@nklmish](https://github.com/nklmish) |
+| [Laravel Langfuse Integration](./applications/laravel-langfuse) | Laravel examples demonstrating auto-instrumented Langfuse tracing with Laravel AI, Prism, and Neuron AI. | [@axyr](https://github.com/axyr) |
 
 ## Deployment Examples
 
