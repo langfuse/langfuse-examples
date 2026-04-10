@@ -1,0 +1,14 @@
+name: kong-langfuse-tracing
+description: >
+  A Kong plugin for AI observability that is Langfuse compatible .
+version: 1.0.0
+priority: 1000
+source_url: https://github.com/Ramtinboreili/kong-langfuse-tracing
+license: MIT
+maintainers:
+  - name: Ramtin
+    email: ramtin.bor7hp@gmail.com
+categories:
+  - analytics
+  - monitoring
+  - ai-observability
