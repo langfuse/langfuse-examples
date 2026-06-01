@@ -1,3 +1,5 @@
+<img width="2400" height="600" alt="hero-b" src="https://github.com/user-attachments/assets/51896372-42ab-4415-a359-99817f629930" />
+
 # langfuse-examples
 
 Examples on how to deploy and use Langfuse.
