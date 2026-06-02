@@ -13,3 +13,10 @@ management:
   observations:
     annotations:
       enabled: true       # Enable @Observed (if you use observation annotations in code)
+
+otel:
+  exporter:
+    otlp:
+      headers:
+        authorization: {{OTEL_EXPORTER_OTLP_HEADERS_AUTHORIZATION}}  # Set via env var for security}
+

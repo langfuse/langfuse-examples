@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>4.0.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.langfuse</groupId>
@@ -17,18 +17,11 @@
 
     <properties>
         <java.version>21</java.version>
-        <spring-ai.version>1.0.0</spring-ai.version>
+        <spring-ai.version>2.0.0-M2</spring-ai.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>io.opentelemetry.instrumentation</groupId>
-                <artifactId>opentelemetry-instrumentation-bom</artifactId>
-                <version>2.17.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
@@ -44,30 +37,30 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-openai</artifactId>
-        </dependency>
-        <!-- Spring AI needs a reactive web server to run for some reason-->
+
+        <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- Spring AI (OpenAI model) -->
         <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-spring-boot-starter</artifactId>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
         </dependency>
-        <!-- Spring Boot Actuator for observability support -->
+
+        <!-- ✅ Native OpenTelemetry support (Boot 4 way) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-opentelemetry</artifactId>
+        </dependency>
+
+        <!-- Actuator (recommended for observability endpoints) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!-- Micrometer Observation -> OpenTelemetry bridge -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
-        </dependency>
-        <!-- OpenTelemetry OTLP exporter for traces -->
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
