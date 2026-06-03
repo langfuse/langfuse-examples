@@ -1,11 +1,12 @@
 package com.langfuse.quarkus;
 
-import dev.langchain4j.service.SystemMessage;
-import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
-@RegisterAiService()
-public interface MyAiService {
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
+
+@RegisterAiService
+public interface PoemService {
 
     /**
      * Ask the LLM to create a poem about the given topic.
