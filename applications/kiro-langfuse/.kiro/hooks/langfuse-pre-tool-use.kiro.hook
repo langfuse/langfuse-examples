@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Langfuse - Pre Tool Use",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["read", "write", "shell"]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "KIRO_HOOK_EVENT=pre_tool_use node hooks/hook-handler.js"
+  }
+}

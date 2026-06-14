@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.test
+*.log
+.DS_Store
+docker-compose.override.yml
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Claude Code
+.claude/
+
+# Kiro specs (generated per-project)
+.kiro/specs/

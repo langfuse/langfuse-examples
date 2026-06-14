@@ -1,0 +1,193 @@
+# Langfuse v3 test stack for kiro-langfuse integration tests.
+# Usage:
+#   docker compose -f docker-compose.test.yml up --wait
+#   cd hooks && npm run test:integration
+#   docker compose -f docker-compose.test.yml down -v
+
+x-langfuse-env: &langfuse-env
+  # Database
+  DATABASE_URL: postgresql://langfuse_test:${POSTGRES_PASSWORD:-changeme}@postgres:5432/langfuse_test
+  DIRECT_URL: postgresql://langfuse_test:${POSTGRES_PASSWORD:-changeme}@postgres:5432/langfuse_test
+
+  # ClickHouse — single-node mode (no Zookeeper/Keeper needed)
+  CLICKHOUSE_URL: http://clickhouse:8123
+  CLICKHOUSE_USER: clickhouse
+  CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-changeme}
+  CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:9000
+  CLICKHOUSE_CLUSTER_ENABLED: "false"
+
+  # Redis
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  REDIS_AUTH: ${REDIS_PASSWORD:-changeme}
+  REDIS_TLS_ENABLED: "false"
+
+  # S3 / MinIO
+  LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse-test
+  LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+  LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: minioadmin
+  LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_PASSWORD:-changeme}
+  LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://minio:9000
+  LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+  LANGFUSE_S3_EVENT_UPLOAD_PREFIX: "events/"
+  LANGFUSE_S3_MEDIA_UPLOAD_BUCKET: langfuse-test
+  LANGFUSE_S3_MEDIA_UPLOAD_REGION: auto
+  LANGFUSE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: minioadmin
+  LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_PASSWORD:-changeme}
+  LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://minio:9000
+  LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: "true"
+  LANGFUSE_S3_MEDIA_UPLOAD_PREFIX: "media/"
+
+  # Auth & security (test-only values)
+  NEXTAUTH_URL: http://localhost:3033
+  NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-changeme}
+  ENCRYPTION_KEY: ${ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000}
+  SALT: ${SALT:-changeme}
+
+  # Bootstrap a project with known API keys for integration tests
+  LANGFUSE_INIT_ORG_ID: test-org
+  LANGFUSE_INIT_ORG_NAME: Test Org
+  LANGFUSE_INIT_PROJECT_ID: test-project
+  LANGFUSE_INIT_PROJECT_NAME: Test Project
+  LANGFUSE_INIT_PROJECT_PUBLIC_KEY: pk-lf-test
+  LANGFUSE_INIT_PROJECT_SECRET_KEY: sk-lf-test
+  LANGFUSE_INIT_USER_EMAIL: test@kiro-langfuse.dev
+  LANGFUSE_INIT_USER_NAME: Test User
+  LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_USER_PASSWORD:-changeme}
+
+  # Fast ingestion for tests (minimum 1ms)
+  LANGFUSE_INGESTION_QUEUE_DELAY_MS: "1"
+  LANGFUSE_INGESTION_CLICKHOUSE_WRITE_INTERVAL_MS: "1"
+
+  # Telemetry off for tests
+  TELEMETRY_ENABLED: "false"
+  NEXT_PUBLIC_SIGN_UP_DISABLED: "false"
+  LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "false"
+
+x-langfuse-depends: &langfuse-depends
+  postgres:
+    condition: service_healthy
+  clickhouse:
+    condition: service_healthy
+  minio:
+    condition: service_healthy
+  minio-init:
+    condition: service_completed_successfully
+  redis:
+    condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5433:5432"
+    environment:
+      POSTGRES_USER: langfuse_test
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: langfuse_test
+      TZ: UTC
+    volumes:
+      - pg_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langfuse_test"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.3
+    restart: unless-stopped
+    user: "101:101"
+    ports:
+      - "127.0.0.1:8124:8123"
+      - "127.0.0.1:9001:9000"
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-changeme}
+      TZ: UTC
+    volumes:
+      - ch_test_data:/var/lib/clickhouse
+      - ch_test_logs:/var/log/clickhouse-server
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8123/ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 1s
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9091"
+    ports:
+      - "127.0.0.1:9092:9000"
+      - "127.0.0.1:9093:9091"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-changeme}
+    volumes:
+      - minio_test_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # One-shot container that creates the S3 bucket in MinIO before Langfuse starts.
+  minio-init:
+    image: minio/minio:latest
+    entrypoint: >
+      sh -c "
+        mc alias set local http://minio:9000 minioadmin $${MINIO_PASSWORD:-changeme} &&
+        mc mb local/langfuse-test --ignore-existing &&
+        echo 'Bucket ready'
+      "
+    depends_on:
+      minio:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6380:6379"
+    command: redis-server --requirepass ${REDIS_PASSWORD:-changeme}
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-changeme}", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  langfuse-web:
+    image: langfuse/langfuse:3
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3033:3000"
+    depends_on:
+      <<: *langfuse-depends
+    environment:
+      <<: *langfuse-env
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/public/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 120s
+
+  langfuse-worker:
+    image: langfuse/langfuse-worker:3
+    restart: unless-stopped
+    depends_on:
+      <<: *langfuse-depends
+    ports:
+      - "127.0.0.1:3034:3030"
+    environment:
+      <<: *langfuse-env
+
+volumes:
+  pg_test_data:
+  ch_test_data:
+  ch_test_logs:
+  minio_test_data:

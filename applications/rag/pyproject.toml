@@ -1,0 +1,20 @@
+[project]
+name = "rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langchain-community>=0.4",
+    "langchain-openai>=1.0.1",
+    "langchain-core>=0.4",
+    "langchain-text-splitters>=0.4",
+    "langfuse>=3.8.0",
+    "python-dotenv>=1.1.1",
+    "beautifulsoup4>=4.14.2",
+    "langchain>=1.0.2",
+]
+
+[tool.ruff]
+line-length = 120
+indent-width = 2
