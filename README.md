@@ -38,19 +38,21 @@ For the Langfuse-maintained modules checkout [langfuse-terraform-aws](https://gi
 
 Below is a list of SDKs maintained by the community. Please note that for tracing (other than Python or JS/TS), you can also use the [OpenTelemetry SDK of your choice](https://opentelemetry.io/docs/languages/) and send traces to the [Langfuse OTel Endpoint](https://langfuse.com/integrations/native/opentelemetry).
 
-| Language | Description | Contributor |
-|----------|-------------|-------------|
-| Rust     | Unofficial Rust client for Langfuse: [adolfousier/langfuse-rust](https://github.com/adolfousier/langfuse-rust) | [@adolfousier](https://github.com/adolfousier) |
-| Ruby     | Unofficial Ruby SDK for Langfuse: [ai-firstly/langfuse-ruby](https://github.com/ai-firstly/langfuse-ruby) | [@ai-firstly](https://github.com/ai-firstly) |
-| Ruby     | Unofficial Ruby SDK for Langfuse: [simplepractice/langfuse-ruby](https://github.com/simplepractice/langfuse-ruby) | [@NoahFisher](https://github.com/NoahFisher) |
-| Elixir   | Unofficial Elixir SDK for Langfuse: [workera-ai/langfuse_sdk](https://github.com/workera-ai/langfuse_sdk) | [@workera-ai](https://github.com/workera-ai) |
-| PHP      | PHP library for integrating Langfuse: [janzaba/langfuse-php](https://github.com/janzaba/langfuse-php) | [@janzaba](https://github.com/janzaba) |
-| Laravel | Laravel SDK with tracing, prompts, and auto-instrumentation for Prism, Laravel AI, and Neuron AI: [axyr/laravel-langfuse](https://github.com/axyr/laravel-langfuse) | [@axyr](https://github.com/axyr) |
-| .NET     | .NET client library for Langfuse: [lukaszzborek/Langfuse-dotnet](https://github.com/lukaszzborek/Langfuse-dotnet) | [@lukaszzborek](https://github.com/lukaszzborek) |
-| JVM      | Java/JVM SDK for Langfuse: [kpavlov/langfuse-jvm](https://github.com/kpavlov/langfuse-jvm) | [@kpavlov](https://github.com/kpavlov) |
-| Go       | Go SDK for Langfuse: [henomis/langfuse-go](https://github.com/henomis/langfuse-go) | [@henomis](https://github.com/henomis) |
-| Go       | Go SDK for Langfuse: [wepala/langfuse-go](https://github.com/wepala/langfuse-go) | [@wepala](https://github.com/wepala) |
-| Go       | Go SDK for Langfuse: [oiime/langfuse-go](https://github.com/oiime/langfuse-go) | [@oiime](https://github.com/oiime) |
+| Language    | Description                                                                                                                                                         | Contributor                                     |
+|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| Rust        | Unofficial Rust client for Langfuse: [adolfousier/langfuse-rust](https://github.com/adolfousier/langfuse-rust)                                                      | [@adolfousier](https://github.com/adolfousier)  |
+| Ruby        | Unofficial Ruby SDK for Langfuse: [ai-firstly/langfuse-ruby](https://github.com/ai-firstly/langfuse-ruby)                                                           | [@ai-firstly](https://github.com/ai-firstly)    |
+| Ruby        | Unofficial Ruby SDK for Langfuse: [simplepractice/langfuse-ruby](https://github.com/simplepractice/langfuse-ruby)                                                   | [@NoahFisher](https://github.com/NoahFisher)    |
+| Elixir      | Unofficial Elixir SDK for Langfuse: [workera-ai/langfuse_sdk](https://github.com/workera-ai/langfuse_sdk)                                                           | [@workera-ai](https://github.com/workera-ai)    |
+| PHP         | PHP library for integrating Langfuse: [janzaba/langfuse-php](https://github.com/janzaba/langfuse-php)                                                               | [@janzaba](https://github.com/janzaba)          |
+| Laravel     | Laravel SDK with tracing, prompts, and auto-instrumentation for Prism, Laravel AI, and Neuron AI: [axyr/laravel-langfuse](https://github.com/axyr/laravel-langfuse) | [@axyr](https://github.com/axyr)                |
+| .NET        | .NET client library for Langfuse: [lukaszzborek/Langfuse-dotnet](https://github.com/lukaszzborek/Langfuse-dotnet)                                                   | [@lukaszzborek](https://github.com/lukaszzborek) |
+| Java | Langfuse Java Client: https://github.com/langfuse/langfuse-java                                                                             | [@Steffen911](https://github.com/Steffen911) |
+| Java / Quarkus | Quarkus extension for Langfuse: https://docs.quarkiverse.io/quarkus-langfuse/dev/                                                                                   | [@edeandrea](https://github.com/edeandrea) |
+| JVM         | Java/JVM SDK for Langfuse: [kpavlov/langfuse-jvm](https://github.com/kpavlov/langfuse-jvm)                                                                          | [@kpavlov](https://github.com/kpavlov)          |
+| Go          | Go SDK for Langfuse: [henomis/langfuse-go](https://github.com/henomis/langfuse-go)                                                                                  | [@henomis](https://github.com/henomis)          |
+| Go          | Go SDK for Langfuse: [wepala/langfuse-go](https://github.com/wepala/langfuse-go)                                                                                    | [@wepala](https://github.com/wepala)            |
+| Go          | Go SDK for Langfuse: [oiime/langfuse-go](https://github.com/oiime/langfuse-go)                                                                                      | [@oiime](https://github.com/oiime)              |
 
 
 
