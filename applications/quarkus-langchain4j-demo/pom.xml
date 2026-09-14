@@ -17,7 +17,7 @@
 		        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-		        <quarkus.platform.version>3.36.1</quarkus.platform.version>
+		        <quarkus.platform.version>3.39.3</quarkus.platform.version>
 		        <skipITs>true</skipITs>
 		        <surefire-plugin.version>3.5.6</surefire-plugin.version>
     </properties>
@@ -34,7 +34,7 @@
 		        <dependency>
 				        <groupId>io.quarkiverse.langchain4j</groupId>
 				        <artifactId>quarkus-langchain4j-bom</artifactId>
-				        <version>1.10.0</version>
+				        <version>1.13.1</version>
 				        <type>pom</type>
 				        <scope>import</scope>
 		        </dependency>
@@ -51,13 +51,13 @@
             <artifactId>quarkus-opentelemetry</artifactId>
         </dependency>
 		    <dependency>
-						<groupId>io.opentelemetry</groupId>
-						<artifactId>opentelemetry-exporter-otlp</artifactId>
+						<groupId>io.quarkus</groupId>
+						<artifactId>quarkus-micrometer-opentelemetry</artifactId>
 				</dependency>
 	     <dependency>
 				     <groupId>io.quarkiverse.langfuse</groupId>
 				     <artifactId>quarkus-langfuse</artifactId>
-				     <version>0.1.1</version>
+				     <version>0.5.0</version>
 	     </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
