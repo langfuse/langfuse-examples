@@ -44,3 +44,5 @@ next-env.d.ts
 .claude
 .mcp.json
 CLAUDE.md
+# The repository root ignores lib/ (Python); this app keeps its TypeScript helpers there
+!lib/

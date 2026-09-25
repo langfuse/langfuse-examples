@@ -1,21 +1,21 @@
 # User Feedback with Langfuse
 
-A Next.js chat application demonstrating how to collect and integrate user feedback into Langfuse traces for AI observability and evaluation.
+A Next.js chat application built with the Vercel AI SDK 7 that records thumbs up/down feedback as [Langfuse scores](https://langfuse.com/docs/observability/features/user-feedback) on the trace of the rated answer.
 
 ![Demo Screenshot](./assets/demo-screenshot.png)
 
 ## Key Features
 
-- **Real-time Feedback Collection**: Thumbs up/down rating with optional comments on AI responses
-- **Langfuse Tracing**: Full observability of LLM calls with OpenTelemetry integration
-- **Feedback-to-Trace Linking**: User feedback automatically sent to Langfuse as scores tied to specific traces
-- **Session Management**: Track conversation context across multiple messages
+- **Tracing**: Every chat response is traced in Langfuse, including the AI SDK model calls
+- **Feedback-to-trace linking**: Each assistant message ID is the Langfuse trace ID of the response, so a rating can be attached to the right trace
+- **Server-side feedback route**: Feedback is validated and recorded as a score by the server; no Langfuse keys reach the browser
+- **Session tracking**: Messages of one chat are grouped into a Langfuse session
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 22+ (required by `@langfuse/vercel-ai-sdk`)
 - OpenAI API key
-- Langfuse credentials
+- Langfuse API keys
 
 ## Setup
 
@@ -25,76 +25,80 @@ A Next.js chat application demonstrating how to collect and integrate user feedb
 npm install
 ```
 
-2. Create `.env` file with your API keys:
+2. Create a `.env` file:
 
 ```bash
-# OpenAI API Key
-OPENAI_API_KEY=your-openai-api-key
+OPENAI_API_KEY=sk-...
 
-# Langfuse Configuration
-NEXT_PUBLIC_LANGFUSE_HOST=https://cloud.langfuse.com
-NEXT_PUBLIC_LANGFUSE_PUBLIC_KEY=pk-lf-fe2c726b-38cd-4068-be67-d3f786499b82
+LANGFUSE_PUBLIC_KEY=pk-lf-...
 LANGFUSE_SECRET_KEY=sk-lf-...
+LANGFUSE_BASE_URL=https://cloud.langfuse.com # 🇪🇺 EU region. 🇺🇸 US: https://us.cloud.langfuse.com
 ```
 
-Get your Langfuse keys from [https://cloud.langfuse.com](https://cloud.langfuse.com)
+Get your Langfuse keys from your project settings in [Langfuse](https://cloud.langfuse.com).
 
 ## How to Run
-
-Start the development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to interact with the chat interface.
+Open [http://localhost:3000](http://localhost:3000) and chat with the assistant.
 
 ## How It Works
 
-### 1. Tracing LLM Calls
+### 1. Tracing (`instrumentation.ts`)
 
-The application uses Langfuse's OpenTelemetry integration to automatically trace all LLM calls:
+`register()` sets up the OpenTelemetry tracer provider with the `LangfuseSpanProcessor` and registers the Langfuse integration for AI SDK 7 (`registerTelemetry(new LangfuseVercelAiSdkIntegration())`).
 
-- Each chat message generates a trace in Langfuse with session tracking
-- Traces capture input, output, model used, and token usage
-- The trace ID is used as the message ID for linking feedback
+Next.js bundles `instrumentation.ts` separately from route handlers. The span processor is therefore kept as a process-wide singleton on `globalThis`, so the chat route flushes the same processor that `register()` attached.
 
-### 2. Collecting User Feedback
+### 2. One trace per answer (`app/api/chat/route.ts`)
 
-Users can provide feedback on AI responses through:
+The chat route wraps each response in `startActiveObservation` with `endOnExit: false`, ends the observation in `onFinish` / `onError` once the stream has finished, and flushes spans with `after()` so they are exported before a serverless function is frozen.
 
-- **Thumbs up/down**: Simple binary feedback (1 or 0)
-- **Optional comments**: Additional context about the rating
-
-The feedback UI appears below each assistant message in the chat interface.
-
-![Feedback UI](./assets/feedback-ui.png)
-
-### 3. Sending Feedback to Langfuse
-
-When a user provides feedback, it's automatically sent to Langfuse as a score:
+The trace ID becomes the assistant message ID:
 
 ```typescript
-langfuse.score({
-  traceId: messageId,        // Links to the original trace
-  id: `user-feedback-${messageId}`,
-  name: "user-feedback",
-  value: value,              // 1 for thumbs up, 0 for thumbs down
-  comment: comment,          // Optional user comment
+return result.toUIMessageStreamResponse({
+  generateMessageId: () => traceId ?? generateId(),
 });
 ```
 
-### 4. Viewing Feedback in Langfuse
+`traceId` is only set when the trace is valid. Without active tracing, for example without Langfuse keys in local development, messages get a random ID and feedback on them is skipped.
 
-In your Langfuse dashboard, you can:
+### 3. Collecting feedback (`app/page.tsx`)
 
-- View user feedback scores alongside traces
-- Filter traces by feedback ratings
-- Analyze patterns in user satisfaction
-- Use feedback for model evaluation and improvement
+Thumbs up/down with an optional comment appear below each assistant message. The page posts `{ messageId, value, comment }` to `/api/feedback`.
+
+![Feedback UI](./assets/feedback-ui.png)
+
+### 4. Recording feedback as a score (`app/api/feedback/route.ts`)
+
+The feedback route validates the request and creates a score on the trace:
+
+```typescript
+langfuse.score.create({
+  id: `user-feedback-${messageId}`, // a changed rating updates the same score
+  traceId: messageId,
+  name: "user-feedback",
+  value, // 1 = thumbs up, 0 = thumbs down
+  dataType: "BOOLEAN",
+  comment,
+});
+await langfuse.flush();
+```
+
+To send feedback directly from the browser instead, use the Langfuse browser SDK with your public key. See the [User Feedback docs](https://langfuse.com/docs/observability/features/user-feedback).
+
+### 5. Viewing feedback in Langfuse
+
+Feedback appears as the `user-feedback` score on each trace. Filter traces by `user-feedback`, add low-rated traces to an [annotation queue](https://langfuse.com/docs/evaluation/evaluation-methods/annotation-queues), or compare feedback over time in [Score Analytics](https://langfuse.com/docs/evaluation/scores/score-analytics).
 
 ![Langfuse Score](./assets/langfuse-score.png)
 
 ## Learn More
 
+- [User Feedback docs](https://langfuse.com/docs/observability/features/user-feedback)
+- [Vercel AI SDK integration](https://langfuse.com/integrations/frameworks/vercel-ai-sdk)
 - [Langfuse Documentation](https://langfuse.com/docs)
