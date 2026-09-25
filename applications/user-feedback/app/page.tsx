@@ -40,13 +40,7 @@ import { useChat } from "@ai-sdk/react";
 import { GlobeIcon, MicIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { LangfuseWeb } from "langfuse";
 import { DefaultChatTransport } from "ai";
-
-const langfuse = new LangfuseWeb({
-  baseUrl: process.env.NEXT_PUBLIC_LANGFUSE_HOST,
-  publicKey: process.env.NEXT_PUBLIC_LANGFUSE_PUBLIC_KEY,
-});
 
 const models = [
   { id: "gpt-4o-mini", name: "GPT-4o Mini" },
@@ -126,14 +120,17 @@ const Example = () => {
     // Update the local state
     setUserFeedback((prev) => new Map([...prev, [messageId, { value, comment }]]));
 
-    // Send feedback to Langfuse
-    langfuse.score({
-      traceId: messageId,
-      id: `user-feedback-${messageId}`,
-      name: "user-feedback",
-      value: value,
-      comment: comment,
-    });
+    // Send feedback to the server, which records it as a Langfuse score on the
+    // trace whose ID is this message ID (see app/api/feedback/route.ts)
+    fetch("/api/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messageId, value, comment }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      })
+      .catch(() => toast.error("Could not save your feedback. Please try again."));
   };
 
   return (
