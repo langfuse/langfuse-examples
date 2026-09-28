@@ -1,0 +1,14 @@
+services:
+  spring-ai-demo:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-https://cloud.langfuse.com/api/public/otel}
+      OTEL_EXPORTER_OTLP_HEADERS: ${OTEL_EXPORTER_OTLP_HEADERS:-default_OTEL_EXPORTER_OTLP_HEADERS}
+      SPRING_AI_GOOGLE_GENAI_APIKEY: ${SPRING_AI_GOOGLE_GENAI_APIKEY:-default_SPRING_AI_GOOGLE_GENAI_APIKEY}
+      SPRING_AI_OPENAI_APIKEY: ${SPRING_AI_OPENAI_APIKEY:-default_SPRING_AI_OPENAI_APIKEY}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-openai}
+    restart: unless-stopped
