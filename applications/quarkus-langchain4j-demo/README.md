@@ -3,21 +3,27 @@
 ## Prerequisites
 
 - Java 21+
-- Langfuse stack ([Cloud](https://cloud.langfuse.com/) or [Self-Hosted](https://langfuse.com/docs/deployment/self-host))
-- Langfuse API Keys
 - An OpenAI Api Key
 
 ## How to run
 
-1. Configure environment variables to connect Spring AI demo app with Langfuse.
+1. Configure environment variables.
+
    ```
-   export QUARKUS_LANGCHAIN4J_OPENAI_API_KEY=sk-xxx-...
-   export QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT="https://cloud.langfuse.com/api/public/otel" # 🇪🇺 EU data region
-   # export QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT="https://us.cloud.langfuse.com/api/public/otel" # 🇺🇸 US data region
-   # export QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:3000/api/public/otel" # 🏠 Local deployment (>= v3.22.0)
-   export QUARKUS_OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic $(echo -n "pk-lf-xxx:sk-lf-xxx" | base64)"
+   export OPENAI_API_KEY=sk-xxx-...
    ```
 2. Run the sample application via `./mvnw quarkus:dev`.
-3. Observe the new trace in the Langfuse web UI.
+3. You should see something in the logs like this, indicating the URL/credentials of Langfuse:
+
+   ```
+   Dev Services for Langfuse started.
+   Other applications in dev mode will find it automatically.
+   For Quarkus applications in production mode, you can connect to this instance by starting you application with -Dquarkus.langfuse.base-url=http://localhost:42971.
+   Log in with:
+     Email: quarkus@quarkus.io
+     Password: quarkuslangfuse 
+   ```
+
+4. Observe the new trace in the Langfuse web UI (indicated at the URL in the above message).
 
 ![sample-trace](./screenshots/quarkus-langchain4j-demo-trace.png)
