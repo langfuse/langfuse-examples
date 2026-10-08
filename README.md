@@ -20,6 +20,7 @@ Here, we try to highlight amazing work by our contributors and partners.
 | [Custom Annotation UI](./applications/custom-annotation-ui) | An example on building a custom annotation UI using Langfuse APIs. | [@aabedraba](https://github.com/aabedraba) |
 | [Kiro Langfuse Integration](./applications/kiro-langfuse) | Kiro IDE hooks that send AI agent activity traces to Langfuse. | [@nklmish](https://github.com/nklmish) |
 | [Laravel Langfuse Integration](./applications/laravel-langfuse) | Laravel examples demonstrating auto-instrumented Langfuse tracing with Laravel AI, Prism, and Neuron AI. | [@axyr](https://github.com/axyr) |
+| [TeamBench Evaluation](./applications/teambench-evaluation) | Import agent role summaries and compare verifier approvals with deterministic task scores. | [@ybkim95](https://github.com/ybkim95) |
 
 ## Deployment Examples
 
