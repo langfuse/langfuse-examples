@@ -48,6 +48,7 @@ Below is a list of SDKs maintained by the community. Please note that for tracin
 | Laravel | Laravel SDK with tracing, prompts, and auto-instrumentation for Prism, Laravel AI, and Neuron AI: [axyr/laravel-langfuse](https://github.com/axyr/laravel-langfuse) | [@axyr](https://github.com/axyr) |
 | .NET     | .NET client library for Langfuse: [lukaszzborek/Langfuse-dotnet](https://github.com/lukaszzborek/Langfuse-dotnet) | [@lukaszzborek](https://github.com/lukaszzborek) |
 | JVM      | Java/JVM SDK for Langfuse: [kpavlov/langfuse-jvm](https://github.com/kpavlov/langfuse-jvm) | [@kpavlov](https://github.com/kpavlov) |
+| Java     | OpenTelemetry-based Langfuse tracing with a standalone core and Spring Boot, Spring AI, and LangChain4j integrations (MIT, production preview): [ChoMinGi/langfuse-otel-java](https://github.com/ChoMinGi/langfuse-otel-java) | [@ChoMinGi](https://github.com/ChoMinGi) |
 | Go       | Go SDK for Langfuse: [henomis/langfuse-go](https://github.com/henomis/langfuse-go) | [@henomis](https://github.com/henomis) |
 | Go       | Go SDK for Langfuse: [wepala/langfuse-go](https://github.com/wepala/langfuse-go) | [@wepala](https://github.com/wepala) |
 | Go       | Go SDK for Langfuse: [oiime/langfuse-go](https://github.com/oiime/langfuse-go) | [@oiime](https://github.com/oiime) |
