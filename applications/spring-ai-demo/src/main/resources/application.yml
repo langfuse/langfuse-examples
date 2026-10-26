@@ -6,6 +6,8 @@ spring:
       observations:
         log-prompt: true       # Include prompt content in tracing (disabled by default for privacy)
         log-completion: true   # Include completion content in tracing (disabled by default)
+langfuse:
+  environment: ${LANGFUSE_ENVIRONMENT:development}
 management:
   tracing:
     sampling:
@@ -13,3 +15,12 @@ management:
   observations:
     annotations:
       enabled: true       # Enable @Observed (if you use observation annotations in code)
+    enable:
+      http.server.requests: false   # Keep Langfuse traces focused on AI/tool spans
+      http.client.requests: false
+otel:
+  instrumentation:
+    spring-webmvc:
+      enabled: false
+    spring-web:
+      enabled: false
