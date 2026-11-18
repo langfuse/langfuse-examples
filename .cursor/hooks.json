@@ -3,43 +3,43 @@
   "hooks": {
     "beforeSubmitPrompt": [
       {
-        "command": "/usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd before-submit-prompt",
+        "command": "/usr/bin/env -u LANGSMITH_AGENT_ID /usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd before-submit-prompt",
         "timeout": 15
       }
     ],
     "afterAgentResponse": [
       {
-        "command": "/usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd after-agent-response"
+        "command": "/usr/bin/env -u LANGSMITH_AGENT_ID /usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd after-agent-response"
       }
     ],
     "afterAgentThought": [
       {
-        "command": "/usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd after-agent-thought"
+        "command": "/usr/bin/env -u LANGSMITH_AGENT_ID /usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd after-agent-thought"
       }
     ],
     "postToolUse": [
       {
-        "command": "/usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd post-tool-use"
+        "command": "/usr/bin/env -u LANGSMITH_AGENT_ID /usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd post-tool-use"
       }
     ],
     "postToolUseFailure": [
       {
-        "command": "/usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd post-tool-use-failure"
+        "command": "/usr/bin/env -u LANGSMITH_AGENT_ID /usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd post-tool-use-failure"
       }
     ],
     "subagentStart": [
       {
-        "command": "/usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd subagent-start"
+        "command": "/usr/bin/env -u LANGSMITH_AGENT_ID /usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd subagent-start"
       }
     ],
     "subagentStop": [
       {
-        "command": "/usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd subagent-stop"
+        "command": "/usr/bin/env -u LANGSMITH_AGENT_ID /usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd subagent-stop"
       }
     ],
     "stop": [
       {
-        "command": "/usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd stop"
+        "command": "/usr/bin/env -u LANGSMITH_AGENT_ID /usr/local/lib/langsmith-tracing/binary/langsmith-tracing.cmd stop"
       }
     ]
   }
