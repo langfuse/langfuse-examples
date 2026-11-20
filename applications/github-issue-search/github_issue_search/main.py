@@ -119,7 +119,8 @@ def handle_turn(client: OpenAI, console: Console, messages: list):
 
     while True:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-6-luna",
+            reasoning_effort="none",
             messages=messages,
             tools=TOOLS,
         )
